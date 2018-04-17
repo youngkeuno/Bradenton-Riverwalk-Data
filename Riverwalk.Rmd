@@ -1,0 +1,161 @@
+---
+title: "Riverwalk"
+author: "YoungKeun"
+date: "November 13, 2017"
+output:
+  html_document:
+    fig_width: 6
+    fig_height: 4
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Riverwalk
+
+I decided to dig deeper into the Riverwalk survey results by looking for additional relationships that could easily be missed by reading the summary alone. Some of these relationships are more useful than others. However, I'm sure all of them will spark interest. 
+
+I'm going to begin by merely summarizing the results from the google forms page just so that all the data are on a single document. The best way to show each of the counts (which is how google forms does it) is through pie graphs:
+
+```{r load Riverwalkdata.Rdata, include=FALSE}
+
+library(tidyverse)
+
+```
+
+
+```{r,fig.width=8, fig.height=5.2, echo=FALSE}
+`Riverwalk.Success.Factors.Survey.(Responses)...Form.Responses.1` <- read.csv("~/Downloads/Riverwalk Success Factors Survey (Responses) - Form Responses 1.csv")
+View(`Riverwalk.Success.Factors.Survey.(Responses)...Form.Responses.1`)
+pie <- ggplot(data=`Riverwalk.Success.Factors.Survey.(Responses)...Form.Responses.1`, aes(x = factor(1), fill = What.is.your.connection.to.the.Bradenton.area.)) +
+     geom_bar(width = 1)
+pie + coord_polar(theta = "y") + labs(fill="What is your connection to the Bradenton area?")
+```
+```{r,fig.width=9, fig.height=6, echo=FALSE}
+pie <- ggplot(data=`Riverwalk.Success.Factors.Survey.(Responses)...Form.Responses.1`, aes(x = factor(1), fill = How.long.have.you.lived.in...worked.in...visited.Bradenton.)) +
+     geom_bar(width = 1)
+pie + coord_polar(theta = "y") + labs(fill="How long have you lived in/ worked in/ visited Bradenton?")
+```
+```{r,fig.width=8.2, fig.height=5.2, echo=FALSE}
+pie <- ggplot(data=`Riverwalk.Success.Factors.Survey.(Responses)...Form.Responses.1`, aes(x = factor(1), fill = How.often.do.you.go.to.Riverwalk.each.month.)) +
+     geom_bar(width = 1)
+pie + coord_polar(theta = "y")+ labs(fill="How often do you go to Riverwalk each month?")
+```
+```{r,fig.width=9, fig.height=6, echo=FALSE}
+pie <- ggplot(data=`Riverwalk.Success.Factors.Survey.(Responses)...Form.Responses.1`, aes(x = factor(1), fill = How.did.you.get.here.today.)) +
+     geom_bar(width = 1)
+pie + coord_polar(theta = "y")+ labs(fill="How did you get here today?")
+```
+```{r,fig.width=9, fig.height=6, echo=FALSE}
+pie <- ggplot(data=`Riverwalk.Success.Factors.Survey.(Responses)...Form.Responses.1`, aes(x = factor(1), fill = How.much.time.do.you.typically.spend.at.Riverwalk.)) +
+     geom_bar(width = 1)
+pie + coord_polar(theta = "y")+ labs(fill="How much time do you typically spend at Riverwalk")
+```
+```{r,fig.width=8, fig.height=5.7, echo=FALSE}
+pie <- ggplot(data=`Riverwalk.Success.Factors.Survey.(Responses)...Form.Responses.1`, aes(x = factor(1), fill = How.do.you.feel.about.this.place.)) +
+     geom_bar(width = 1)
+pie + coord_polar(theta = "y")+ labs(fill="How do you feel about this place?")
+```
+```{r,fig.width=7.5, fig.height=5, echo=FALSE}
+
+pie <- ggplot(data=`Riverwalk.Success.Factors.Survey.(Responses)...Form.Responses.1`, aes(x = factor(1), fill = Indicate.your.gender)) +
+     geom_bar(width = 1)
+pie + coord_polar(theta = "y")+ labs(fill="Indicate your gender")
+```
+```{r,fig.width=7, fig.height=4.8, echo=FALSE}
+pie <- ggplot(data=`Riverwalk.Success.Factors.Survey.(Responses)...Form.Responses.1`, aes(x = factor(1), fill = Indicate.your.age)) +
+     geom_bar(width = 1)
+pie + coord_polar(theta = "y")+ labs(fill="Indicate your age")
+```
+```{r,fig.width=7, fig.height=4.8, echo=FALSE}
+pie <- ggplot(data=`Riverwalk.Success.Factors.Survey.(Responses)...Form.Responses.1`, aes(x = factor(1), fill = Indicate.your.race.ethnicity)) +
+     geom_bar(width = 1)
+pie + coord_polar(theta = "y")+ labs(fill="Indicate your race/ethnicity")
+```
+
+```{r,fig.width=8, fig.height=5.2, echo=FALSE}
+ggplot(data=`Riverwalk.Success.Factors.Survey.(Responses)...Form.Responses.1`)+geom_bar(mapping=aes(x=factor(What.is.your.home.ZIP.code.)),fill="blue")+labs(x="What is your home ZIP code?")+theme(axis.text.x = element_text(angle = 90, hjust = 1))
+```
+
+Here is one of the graphs from the google forms page (it was going to be a little tricky making a bar graph out of this one):
+
+![](/home/youngkeun/Pictures/Riverwalk1.jpg)
+
+For the question "What one thing do you most enjoy about Riverwalk?" there were too many responses for any graph to meaningfully portray. So I'm going to summarize the results for that question here:
+```{r, echo=FALSE}
+`Riverwalk.Success.Factors.Survey.(Responses)...Form.Responses.1`$What.one.thing.do.you.most.enjoy.about.the.Riverwalk.
+```
+## Riverwalk Analysis
+
+Now we can perform more meaningful analysis. I'm going to display a series of scatter plots that display the way two variables relate to one another. I'll choose the variables depending on what I think might show a meaningful correlation. Since I'm only working with discrete variables rather than continuous ones, I can't really "regress" any variables with one another, but our scatterplot will show us where most of the activity will be, and thus we can treat more activity as "correlation" (most of our variables are discrete because we got them from a survey, but they would have an order if collected differently. Age for example is discrete in our dataset but could very well be continuous if we had collected it differently. Thus looking at more activity as "regression" isn't entirely out of the question). Of course, we might find no meaningful activity, and finding none is just as insightful as finding some. In these scatter plots the size of each bubble will be the number of data points counted for that x and y value. 
+
+The scatterplot below shows how often people go to Riverwalk each month broken down by how long they lived in Bradenton for. The size of each bubble are the number of entries for each fixed number of times one visits Riverwalk and fixed number of years one has lived in Bradenton for. One convenient way to analyze the graph is to choose whether we want to pay attention to length of time one has lived in Bradenton for, or the number of times one visits Bradenton. Say we choose to pay attention to length of time one has lived in Bradenton. Now choose a value. Say we choose "More than ten years." Then if we look on that column, we can see that among  those that have lived in Bradenton for more than ten years, most go to the Riverwalk 2-3 times a month. 
+
+It's easy to see that most of the activity is in the bottom right corner. That implies two things. First, most of the people in our sample have lived in Bradenton for longer. However, it also implies that people who have lived in Bradenton for longer tend to go to the Riverwalk fewer times. If we look at people who have lived in Bradenton for less than a year, most go to Riverwalk 8 times or more a month. That is not the case for those who have lived in Bradenton for more than ten years.  
+
+```{r, fig.width=9, fig.height=6, echo=FALSE}
+ggplot(data=`Riverwalk.Success.Factors.Survey.(Responses)...Form.Responses.1`, aes(x=How.long.have.you.lived.in...worked.in...visited.Bradenton., y=How.often.do.you.go.to.Riverwalk.each.month.,))+geom_count(shape=21, color="sea green", fill="aqua marine") +labs(x="How long have you lived in/ worked in/ visited Bradenton?", y="How often do you go to Riverwalk each month?") + ggtitle("Frequency of Riverwalk Visits and Length of Time in Bradenton")+scale_y_discrete(limits=c("Less than once a month, few times a year", "Once a month", "2-3 times a month", "4-7 times a month", "8 times or more a month", "20", "Every day","I live on the dock so every day"))+scale_x_discrete(limits = c("Does not apply", "Less than a year", "1-5 years", "6-10 years", "More than 10 years"))
+```
+
+Over here we can see that most people spend one hour or more at the Riverwalk. Exceptions to that general trend are ZIP codes 26105, 34228, 34236, and 68516 which all have more people who spend 30 minutes at the Riverwalk. However, due to the paucity of responses per zip code, we should refrain from drawing any conclusions. One thing we can say with certainty is that the most responses came from zip code 34205 and 34207 (from our previous bar graph) and that fact becomes evident in our current graph if we pay close attention to the sizes of the circles in those zip codes.   
+
+```{r, fig.width=9, fig.height=6, echo=FALSE}
+ggplot(data=`Riverwalk.Success.Factors.Survey.(Responses)...Form.Responses.1`, aes(x=factor(What.is.your.home.ZIP.code.), y=How.much.time.do.you.typically.spend.at.Riverwalk.,))+geom_count(shape=21, color="sea green", fill="aqua marine") +labs(x="What is your home ZIP code?", y="How much time do you typically spend at Riverwalk?") + ggtitle("Time Spent at Riverwalk per ZIP code")+theme(plot.title = element_text(hjust = 0.5))+theme(axis.text.x = element_text(angle = 90, hjust = 1))+scale_y_discrete(limits=c("I just walk through", "Every morning and afternoon", "15 minutes", "30 minutes", "1 hour or more", "24-7"))
+```
+
+One observation I can make from looking at the following graph is that it appears as though younger people are more likely to spend 1 hour or more at the Riverwalk while older people are more likely to be evenly distributed between spending 1 hour or more and spending 30 minutes. This may be due to the fact that there are many condos within walking distance to the Riverwalk and older people will feel like they aren't loosing out as much by staying at the Riverwalk for less time (since older people are more likely to live in those condos). 
+
+```{r, fig.width=9, fig.height=6, echo=FALSE}
+ggplot(data=`Riverwalk.Success.Factors.Survey.(Responses)...Form.Responses.1`, aes(x=factor(Indicate.your.age), y=How.much.time.do.you.typically.spend.at.Riverwalk.,))+geom_count(shape=21, color="sea green", fill="aqua marine")+labs(x="Indicate your age", y="How much time do you typically spend at Riverwalk?") + ggtitle("Time Spent at Riverwalk per Age Group")+theme(plot.title = element_text(hjust = 0.5)) +scale_x_discrete(limits=c("Under 18", "18-25", "26-35", "36-45","46-55", "56-65", "over 65"))+scale_y_discrete(limits=c("I just walk through", "Every morning and afternoon", "15 minutes", "30 minutes", "1 hour or more", "24-7"))
+```
+
+There's a lack of data to make any meaningful responses about Asians and perhaps Hispanics too. As for Caucasians and African Americans, although there are more Caucasians than African Americans in our sample, it seems like their satisfaction levels are distributed similarly among the options (strongly positive, somewhat positive, and neutral).  
+
+```{r, fig.width=9, fig.height=6, echo=FALSE}
+ggplot(data=`Riverwalk.Success.Factors.Survey.(Responses)...Form.Responses.1`, aes(x=Indicate.your.race.ethnicity, y=How.do.you.feel.about.this.place.,))+geom_count(shape=21, color="sea green", fill="aqua marine")+labs(x="Indicate your race/ethnicity", y="How do you feel about this place?") + ggtitle("Level of Satisfaction by Race")+theme(plot.title = element_text(hjust = 0.5))
+```
+
+The following graph shows that older people are more likely to say that they feel "strongly positive" about the Riverwalk. Younger people are more likely to feel "somewhat positive" and "neutral" than older people are. So, for whatever reason, old people seem to be more satisfied with the Riverwalk. 
+
+```{r, fig.width=9, fig.height=6, echo=FALSE}
+ggplot(data=`Riverwalk.Success.Factors.Survey.(Responses)...Form.Responses.1`, aes(x=Indicate.your.age, y=How.do.you.feel.about.this.place.,))+geom_count(shape=21, color="sea green", fill="aqua marine")+labs(x="Indicate your age", y="How do you feel about this place?") + ggtitle("Level of Satisfaction by Age")+theme(plot.title = element_text(hjust = 0.5))+scale_x_discrete(limits=c("Under 18", "18-25", "26-35", "36-45","46-55", "56-65", "over 65"))
+```
+
+The following graph shows that those who vacation/visit Bradenton, live in Palmetto, and merely work in Bradenton tend to feel more satisfied with the Riverwalk than those that live in Bradenton feel satisfied with the Riverwalk. Most people who live in Bradenton still feel "strongly positive," however there's more of an even distribution among satisfaction levels than the other options (vacation, work in Bradenton, etc.) have.  
+
+```{r, fig.width=9, fig.height=6, echo=FALSE}
+ggplot(data=`Riverwalk.Success.Factors.Survey.(Responses)...Form.Responses.1`, aes(x=What.is.your.connection.to.the.Bradenton.area., y=How.do.you.feel.about.this.place.))+geom_count(shape=21, color="sea green", fill="aqua marine") +labs(x="What is your connection to the Bradenton area?", y="How do you feel about this place?") + ggtitle("Level of Satisfaction by Connection to Area")+theme(plot.title = element_text(hjust = 0.5))+theme(axis.text.x = element_text(angle = 90, hjust = 1))
+```
+
+Clearly most people drive to the Riverwalk. However, one interesting finding is that out of those that walk, most happen to be slightly older.
+
+```{r, fig.width=9, fig.height=6, echo=FALSE}
+ggplot(data=`Riverwalk.Success.Factors.Survey.(Responses)...Form.Responses.1`, aes(x=How.did.you.get.here.today., y=Indicate.your.age))+geom_count(shape=21, color="sea green", fill="aqua marine")+labs(x="How did you get here today?", y="Indicate your age") + ggtitle("Getting to Riverwalk by Age Group")+theme(plot.title = element_text(hjust = 0.5))+scale_y_discrete(limits=c("Under 18", "18-25", "26-35", "36-45","46-55", "56-65", "over 65"))+scale_x_discrete(limits=c("Bike", "Drove my car", "Lufthansa flight 0468", "Walk"))
+```
+
+One interesting finding is that Caucasians happen to be slightly older than the racial groups. One possibility for why that may be is that condo-dwelling retirees are more likely to be Caucasian. They are also more likely to live near the Riverwalk since there are numerous condos by the Riverwalk.That leads to the age distribution shown below. 
+
+```{r, fig.width=9, fig.height=6, echo=FALSE}
+ggplot(data=`Riverwalk.Success.Factors.Survey.(Responses)...Form.Responses.1`)+geom_bar(mapping= aes(x=Indicate.your.race.ethnicity, fill=Indicate.your.age))+labs(x="Indicate your race/ ethnicity", fill="Indicate your age") + ggtitle("Breakdown of Race by Age Group")+theme(plot.title = element_text(hjust = 0.5))+scale_fill_discrete(limits=c("Under 18", "18-25", "26-35", "36-45","46-55", "56-65", "over 65"))
+```
+```{r, fig.width=9, fig.height=6, echo=FALSE}
+ggplot(data=`Riverwalk.Success.Factors.Survey.(Responses)...Form.Responses.1`)+geom_bar(mapping= aes(x=Indicate.your.race.ethnicity, fill=Indicate.your.gender))+labs(x="Indicate your race/ ethnicity", fill="Indicate your gender") + ggtitle("Breakdown of Race by Gender")+theme(plot.title = element_text(hjust = 0.5))
+```
+
+We can see that Caucasians are ever so slightly more likely to stay for thirty minutes rather than 1 hour. This may have to do with the fact that people who live in the condos close to the Riverwalk are more likely to go for thirty minutes rather than 1 hour. They are also more likely to be Caucasian, which could explain the distribution below.  
+
+```{r, fig.width=9, fig.height=6, echo=FALSE}
+ggplot(data=`Riverwalk.Success.Factors.Survey.(Responses)...Form.Responses.1`)+geom_bar(mapping= aes(x=Indicate.your.race.ethnicity, fill=How.much.time.do.you.typically.spend.at.Riverwalk.))+labs(x="Indicate your race/ ethnicity", fill="How much time do you typically spend at Riverwalk?") + ggtitle("Breakdown of Race by Time Spent at Riverwalk")+theme(plot.title = element_text(hjust = 0.5))+scale_fill_discrete(limits=c("I just walk through", "Every morning and afternoon", "15 minutes", "30 minutes", "1 hour or more", "24-7"))
+```
+
+The bar graph below once again shows us that older people are more likely to spend less time at the Riverwalk.
+
+```{r, fig.width=9, fig.height=6, echo=FALSE}
+ggplot(data=`Riverwalk.Success.Factors.Survey.(Responses)...Form.Responses.1`)+geom_bar(mapping= aes(x=Indicate.your.age, fill=How.much.time.do.you.typically.spend.at.Riverwalk.))+labs(x="Indicate your age", fill="How much time do you typically spend at Riverwalk?") + ggtitle("Breakdown of Age by Time Spent at Riverwalk")+theme(plot.title = element_text(hjust = 0.5))+scale_fill_discrete(limits=c("I just walk through", "Every morning and afternoon", "15 minutes", "30 minutes", "1 hour or more", "24-7"))
+```
+
+The bar graphs below show us that with the exception of old people, those that walk are more likely to spend less time at the Riverwalk which is to be expected. If they walk there, they live close by, in which case they have less to lose by staying for less time. Older people tend to be more likely to stay for less, but they are also much more likely to drive rather than walk. One explanation for that trend is that even those that live in condos close by feel more comfortable driving than walking due to their age. 
+
+```{r, fig.width=11, fig.height=6, echo=FALSE}
+ggplot(data=`Riverwalk.Success.Factors.Survey.(Responses)...Form.Responses.1`)+geom_bar(mapping= aes(x=Indicate.your.age, fill=How.much.time.do.you.typically.spend.at.Riverwalk.))+facet_wrap(~How.did.you.get.here.today.)+labs(x="Indicate your age", fill="How much time do you typically spend at Riverwalk?", facet="How did you get here today?") + ggtitle("Breakdown of Age by Time Spent at Riverwalk and Method of Arrival")+theme(plot.title = element_text(hjust = 0.5))+theme(axis.text.x = element_text(angle = 90, hjust = 1))+scale_fill_discrete(limits=c("I just walk through", "Every morning and afternoon", "15 minutes", "30 minutes", "1 hour or more", "24-7"))+scale_x_discrete(limits=c("Under 18", "18-25", "26-35", "36-45","46-55", "56-65", "over 65"))
